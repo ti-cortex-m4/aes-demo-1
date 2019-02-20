@@ -1,0 +1,2 @@
+https://e2e.ti.com/support/microcontrollers/other/f/908/t/368820?AES-Encryption-for-TIVA-Devices
+http://www.ti.com/lit/an/spma021b/spma021b.pdf
