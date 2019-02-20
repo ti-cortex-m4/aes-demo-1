@@ -6,12 +6,6 @@ using System.Text;
 
 namespace ConsoleApplication1
 {
-    internal class Config
-    {
-        public byte accessLevel;
-        public char[] pass;
-    }
-
     internal class Program
     {
         public static void Main(string[] args)
@@ -21,32 +15,33 @@ namespace ConsoleApplication1
 
         private void ModbusTransaction1(byte[] frame, ref int count)
         {
-            for(byte i=0; i<count; i++)
+            Console.Write("Send    ");
+            Write(frame, count);
+
+            byte[] data1 =
             {
-                Console.Write(frame[i].ToString("X2")+' ');
-            }
-            Console.WriteLine();
-            
-            byte[] data1 = {
                 0x01, 0x64, 0x10, 0x90, 0x0B, 0x9B, 0xEF, 0x21, 0x4E, 0xD4, 0xB5, 0xCA, 0xB6, 0xF1, 0x93, 0xFB, 0x31,
-                0x0E, 0x84, 0x60, 0xE2};
+                0x0E, 0x84, 0x60, 0xE2
+            };
             data1.CopyTo(frame, 0);
-            
             count = 21;
+
+            Console.Write("Receive ");
+            Write(frame, count);
         }
+
 
         private void ModbusTransaction2(byte[] frame, ref int count)
         {
-            for(byte i=0; i<count; i++)
-            {
-                Console.Write(frame[i].ToString("X2")+' ');
-            }
-            Console.WriteLine();
-            
-            byte[] data2 = {0x01 , 0x65 , 0x00 , 0x00 , 0x00 , 0x09, 0x8D , 0xC4};
+            Console.Write("Send    ");
+            Write(frame, count);
+
+            byte[] data2 = {0x01, 0x65, 0x00, 0x00, 0x00, 0x09, 0x8D, 0xC4};
             data2.CopyTo(frame, 0);
-            
             count = 8;
+
+            Console.Write("Receive ");
+            Write(frame, count);
         }
 
         private void Authorize()
@@ -66,10 +61,6 @@ namespace ConsoleApplication1
                 Console.WriteLine("Авторизация не удалась!\r\nНе удалось запросить ключ авторизации.");
                 return;
             }
-
-//            byte[] data1 = {
-//                0x01, 0x64, 0x10, 0x90, 0x0B, 0x9B, 0xEF, 0x21, 0x4E, 0xD4, 0xB5, 0xCA, 0xB6, 0xF1, 0x93, 0xFB, 0x31,
-//                0x0E, 0x84, 0x60, 0xE2};
 
             byte[] authKey = data.Skip(3).Take(16).ToArray();
             MD5 md5 = MD5.Create();
@@ -91,7 +82,7 @@ namespace ConsoleApplication1
             authReq.CopyTo(data, 9);
             len = 7 + 2 + 16;
             ModbusTransaction2(data, ref len);
-                        
+
             if (len != 8 || ((data[1] & 0x80) != 0))
             {
                 string s = "Авторизация не удалась!";
@@ -122,9 +113,19 @@ namespace ConsoleApplication1
 
                 Console.WriteLine(s);
                 return;
-
             }
-            Console.WriteLine("Успех");
+
+            Console.WriteLine("Success");
+        }
+
+        private void Write(byte[] bytes, int size)
+        {
+            for (byte i = 0; i < size; i++)
+            {
+                Console.Write(bytes[i].ToString("X2") + ' ');
+            }
+
+            Console.WriteLine();
         }
     }
 }
