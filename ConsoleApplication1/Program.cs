@@ -63,8 +63,12 @@ namespace ConsoleApplication1
             }
 
             byte[] authKey = data.Skip(3).Take(16).ToArray();
+            Console.WriteLine("authKey " + ToString(authKey));
+            
             MD5 md5 = MD5.Create();
-            byte[] aesKey = md5.ComputeHash(Encoding.Default.GetBytes(pass));
+            byte[] rgbKey = md5.ComputeHash(Encoding.Default.GetBytes(pass));
+            Console.WriteLine("rgbKey " + ToString(rgbKey));
+            
             byte[] authReq = new byte[16];
 
             Aes aes = Aes.Create();
@@ -72,9 +76,10 @@ namespace ConsoleApplication1
             aes.BlockSize = 128;
             aes.Padding = PaddingMode.None;
             aes.Mode = CipherMode.ECB;
-            ICryptoTransform encrypter = aes.CreateEncryptor(aesKey, null);
+            ICryptoTransform encrypter = aes.CreateEncryptor(rgbKey, null);
             encrypter.TransformBlock(authKey, 0, 16, authReq, 0);
-
+            Console.WriteLine("authReq " + ToString(authReq));
+            
             byte[] writeAuth = {0x01, 0x65, 0x00, 0x00, 0x00, 0x09, 0x12};
             writeAuth.CopyTo(data, 0);
             data[7] = (byte) accessLevel;
@@ -127,5 +132,17 @@ namespace ConsoleApplication1
 
             Console.WriteLine();
         }
+        
+        private string ToString(byte[] bytes) 
+        {
+            string s = "";
+            for (byte i = 0; i < bytes.Length; i++)
+            {
+                s += bytes[i].ToString("X2") + ' ';
+            }
+
+            return s;
+        }
+
     }
 }
