@@ -15,8 +15,7 @@ namespace ConsoleApplication1
 
         private void ModbusTransaction1(byte[] frame, ref int count)
         {
-            Console.Write("Send    ");
-            Write(frame, count);
+            Console.WriteLine("Send    "+ToString(frame, count));
 
             byte[] data1 =
             {
@@ -26,22 +25,19 @@ namespace ConsoleApplication1
             data1.CopyTo(frame, 0);
             count = 21;
 
-            Console.Write("Receive ");
-            Write(frame, count);
+            Console.WriteLine("Receive "+ToString(frame, count));
         }
 
 
         private void ModbusTransaction2(byte[] frame, ref int count)
         {
-            Console.Write("Send    ");
-            Write(frame, count);
+            Console.WriteLine("Send    "+ToString(frame, count));
 
             byte[] data2 = {0x01, 0x65, 0x00, 0x00, 0x00, 0x09, 0x8D, 0xC4};
             data2.CopyTo(frame, 0);
             count = 8;
 
-            Console.Write("Receive ");
-            Write(frame, count);
+            Console.WriteLine("Receive "+ToString(frame, count));
         }
 
         private void Authorize()
@@ -67,7 +63,7 @@ namespace ConsoleApplication1
             
             MD5 md5 = MD5.Create();
             byte[] rgbKey = md5.ComputeHash(Encoding.Default.GetBytes(pass));
-            Console.WriteLine("rgbKey " + ToString(rgbKey));
+            Console.WriteLine("rgbKey  " + ToString(rgbKey));
             
             byte[] authReq = new byte[16];
 
@@ -123,16 +119,16 @@ namespace ConsoleApplication1
             Console.WriteLine("Success");
         }
 
-        private void Write(byte[] bytes, int size)
+        private string ToString(byte[] bytes, int size) 
         {
+            string s = "";
             for (byte i = 0; i < size; i++)
             {
-                Console.Write(bytes[i].ToString("X2") + ' ');
+                s += bytes[i].ToString("X2") + ' ';
             }
 
-            Console.WriteLine();
-        }
-        
+            return s;
+        }        
         private string ToString(byte[] bytes) 
         {
             string s = "";
@@ -143,6 +139,5 @@ namespace ConsoleApplication1
 
             return s;
         }
-
     }
 }
