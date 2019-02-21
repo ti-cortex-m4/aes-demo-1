@@ -1,2 +1,11 @@
 https://e2e.ti.com/support/microcontrollers/other/f/908/t/368820?AES-Encryption-for-TIVA-Devices
 http://www.ti.com/lit/an/spma021b/spma021b.pdf
+
+Send    01 64 00 01 00 08
+Receive 01 64 10 90 0B 9B EF 21 4E D4 B5 CA B6 F1 93 FB 31 0E 84 60 E2
+authKey 90 0B 9B EF 21 4E D4 B5 CA B6 F1 93 FB 31 0E 84
+rgbKey  96 E7 92 18 96 5E B7 2C 92 A5 49 DD 5A 33 01 12
+authReq FB 41 50 DF 9A C4 27 31 B0 44 6E 48 53 12 1C 7F
+Send    01 65 00 00 00 09 12 01 00 FB 41 50 DF 9A C4 27 31 B0 44 6E 48 53 12 1C 7F
+Receive 01 65 00 00 00 09 8D C4
+Success
